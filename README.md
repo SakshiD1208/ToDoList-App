@@ -1,4 +1,4 @@
-To-Do List Flask App
+To-Do List Flask App:
 A simple and intuitive To-Do List application built using Flask, allowing users to add, update, delete tasks, and track their progress. The app has an appealing pastel theme and includes features like progress tracking and user input (name & age).
 
 Features:
