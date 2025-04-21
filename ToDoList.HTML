@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>To-Do List 🌸</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #fceef1, #f8f1e5);
+      color: #3c3c3c;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #c97b9c;
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .user-info {
+      font-size: 18px;
+      color: #7a4f59;
+      margin-bottom: 30px;
+    }
+
+    .user-info span {
+      font-weight: bold;
+      color: #c97b9c;
+    }
+
+    .task-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff8f0;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    .task {
+      background-color: #f8f1e5;
+      padding: 20px;
+      margin: 12px 0;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+    }
+
+    .task.completed {
+      background-color: #d1f5d3;
+      text-decoration: line-through;
+    }
+
+    .task button {
+      background-color: #ff6666;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .task button:hover {
+      background-color: #ff4444;
+    }
+
+    .task label {
+      margin-right: 15px;
+    }
+
+    input[type="text"], input[type="number"], input[type="submit"] {
+      padding: 12px 18px;
+      font-size: 16px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 250px;
+      margin-right: 10px;
+      background-color: #fef6f6;
+    }
+
+    input[type="submit"] {
+      background-color: #ffccf2;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #ff99cc;
+    }
+
+    .progress-bar {
+      width: 100%;
+      background-color: #f3e5f5;
+      height: 30px;
+      border-radius: 20px;
+      margin-top: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress {
+      height: 100%;
+      background-color: #ffb3c6;
+      width: 0%;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      line-height: 30px;
+      border-radius: 20px;
+      transition: width 0.5s ease;
+    }
+
+    a {
+      color: #7a4f59;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background-color: #ffd6d6;
+      display: inline-block;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #ffccd5;
+    }
+
+    .form-container {
+      margin-bottom: 30px;
+      background-color: #fff3f3;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-container input {
+      margin-bottom: 20px;
+    }
+
+    .form-container label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #7a4f59;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>To-Do List 🌸</h1>
+
+  <!-- Form to update name and age -->
+  <div class="form-container">
+    <h2>Update Your Info</h2>
+    <form method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" value="{{ user_name }}" required />
+      
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" placeholder="Enter your age" value="{{ user_age }}" required />
+      
+      <input type="submit" value="Update Info" />
+    </form>
+  </div>
+
+  <div class="user-info">
+    <p>Welcome, <span>{{ user_name }}</span>! You are <span>{{ user_age }} years old</span>.</p>
+  </div>
+
+  <div class="task-container">
+    <h2>Your Tasks</h2>
+    
+    <form action="/add" method="POST" class="form-container">
+      <input type="text" name="task" placeholder="Enter new task" required />
+      <input type="text" name="description" placeholder="Enter task description" required />
+      <input type="submit" value="Add Task" />
+    </form>
+
+    <div id="tasks">
+      {% for task in tasks %}
+        <div class="task {% if task['completed'] %}completed{% endif %}">
+          <div>
+            <label>
+              <input type="checkbox" {% if task['completed'] %}checked{% endif %} onclick="this.form.submit()"> 
+              {{ task['name'] }} - {{ task['description'] }}
+            </label>
+          </div>
+          <div>
+            <form action="/update/{{ task['id'] }}" method="POST" style="display: inline-block;">
+              <button type="submit">Toggle Complete</button>
+            </form>
+            <form action="/delete/{{ task['id'] }}" method="POST" style="display: inline-block;">
+              <button type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="progress-container">
+    <a href="/progress">View Progress</a>
+  </div>
+
+</body>
+</html>
+
