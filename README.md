@@ -17,10 +17,10 @@ A beautiful and functional To-Do list web application built using **Flask** (Pyt
 
 # File Structure
 /todolist-flask-app
-  |-- app.py             # Main Flask app
-  |-- requirements.txt   # Python dependencies
+  |-- ToDoList.py             # Main Flask app
+  |-- requirement.txt   # Python dependencies
   |-- templates/
-      |-- index.html     # Home page with task list
+      |-- ToDoList.html     # Home page with task list
       |-- progress.html  # Progress page showing task completion
   |-- static/
       |-- (CSS files if any, not required in this case)
